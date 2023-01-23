@@ -2,9 +2,10 @@
 
 <template>
 
-    <button class="btn profile-edit-btn" v-on:click="delTask(id)">Delete</button>
+    <button class="btn profile-edit-btn" v-on:click.prevent="delTask(id)">Delete</button>
 
 </template>
+
 <script >
 export default {
     props: {
@@ -12,21 +13,17 @@ export default {
             type: Number
         }
     },
-    data() {
-        return {
-        }
-
-    },
     methods: {
         delTask: function (id) {
-            this.$http.delete('http://localhost:3000/delete/' + id).then(function (data) {
+            this.$http.delete('http://localhost:3000/task/delete/' + this.id, {
+                headers: {
+                    authorization: 'Bearer ' + this.$session.get('token')
+                }
+            }).then(function (data) {
 
                 this.$emit('deleteTask', id);
             })
         }
-    },
-    created() {
-
     }
 }
 </script>
